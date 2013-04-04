@@ -1,0 +1,118 @@
+#include<stdio.h>
+#include<conio.h>
+int n, count=1;
+float x0=0, x1=0, fx0, fx1, er=0, e=0;
+int * derivative ( int  fn[], int size); // function to calculate derivate of fn
+float fnValue( int fun[],int size, float x);
+void printPolynomial( int *polynomial, int size);
+float newtonRaphson(int fn[], int guess);
+void syntheticDivision(int * fn, int divider);
+
+int main()
+{
+    int i;
+    printf("Enter the MAXIMUM DEGREE of the function : ");
+    scanf("%d",&n);
+    int fn[n+1];
+    for(i=n;i>=0;i--)
+    {
+              printf("Enter the COFFICIENT of x^%d :", i);
+              scanf("%d",&fn[i]);
+    }
+    printf("\nF(x)  : ");
+    printPolynomial(fn,n);
+    
+    printf("\n\nEnter your INITIAL GUESS : ");
+    scanf("%f",&x0);
+    printf("Enter the MAXIMUM ERROR allowed :");
+    scanf("%f",&e);
+    float xr;
+
+    while(n>1)
+    {
+             xr = newtonRaphson(fn,x0);
+             syntheticDivision(fn,xr);
+             x0=xr;
+             n--; 
+    }
+    xr = -fn[0]/fn[1];
+    printf("\n\nRoot No.%d : %f",count++,xr);
+    getch();
+    return 0;
+}
+void syntheticDivision(int * fn, int divider)
+{
+     int i;
+     int q[n];
+     for ( i=n-1;i>=0;i--)
+     {
+        fn[i] = fn[i+1]*divider + fn[i];
+     }
+     for(i=0;i<n;i++)
+          fn[i]=fn[i+1];
+}
+float newtonRaphson(int fn[], int guess)
+{
+    //int count = 0;
+    //printf("\n\nNEWTON RAPHSON \n N = %d\nx0 = %f\n",n, guess);
+    int *deriv = derivative(fn,n);
+    printf("\n\nF'%d(x) : ",count);
+    printPolynomial(deriv, n-1);
+    while(1)
+    {
+            //printf("\n\n---------------\n  Iteration %d\n---------------\n",++count);
+            fx0 = fnValue(fn,n,x0);
+            fx1 = fnValue(deriv,n-1,x0);
+            x1 = x0 - (fx0/fx1);
+            er = fabs((x1-x0)/x1);
+            //printf("\nx0 = %f\tfx0 = %f\tfx1 = %f\nx1= %f\tError = %f",x0,x1,fx0,fx1,er);
+            //getch();
+            if(er> e)
+                x0 = x1;
+            else
+            {
+                printf("\n\nRoot No.%d : %f",count++,x1);
+                getch();
+                return x1;
+            }
+    }
+}
+int * derivative ( int  fn[], int size)
+{
+    int i;
+    int* out=(int*)malloc(sizeof(int)*(size-1));
+    //printf("\n DERIVATIVE \n n = %d\n\n",size);
+    for( i = size ; i>0 ; i--)
+         out[i-1] = fn[i]*i;
+    return (out);
+}
+float fnValue( int fun[],int size, float x)
+{
+       float fnVal=0;
+       int i;
+       //printf("\n\nFNVALUE\n n = %d",n);
+       for(i=size;i>=0;i--)
+            fnVal += pow(x,i)*fun[i];   
+       //printf("\nfnval = %f",fnVal);          
+       return fnVal;
+}
+void printPolynomial( int *polynomial, int size)
+{
+    int i;
+    for(i=size;i>=0;i--)
+    {
+         if (i!=0 || polynomial[0]!=0)
+         {
+            if(polynomial[i]>=0 && i!=size)
+                  printf(" +");
+            else
+                  printf(" ");
+            if(polynomial[i]!=0)
+                  printf("%d",polynomial[i]);
+            if(i!=0 && polynomial[i]!=0)
+                  printf("x");
+            if(i>1 && polynomial[i]!=0)
+                  printf("^%d ",i);
+         }
+    }
+}
