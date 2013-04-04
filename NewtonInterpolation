@@ -1,0 +1,35 @@
+// Newton Interpolation
+#include<stdio.h>
+#include<conio.h>
+float x[5]={0,10,15,20,30};
+float fx[5] = {0,227.04,362.78,517.35,901.67};
+int n = 4;
+double pointX=16;
+
+double dividedDifference(int k, int i)
+{
+       double ret;
+       if(k==i)
+               ret = fx[i];
+       else if(k==i-1)
+               ret = (fx[i]-fx[k])/(x[i]-x[k]);
+       else
+               ret = (dividedDifference(k+1,i)- dividedDifference(k,i-1))/(x[i]-x[k]);
+       return ret;
+}
+int main()
+{   
+    double estimate =0;
+    int i,j,k=0;
+    for(i=1;i<=n;i++)
+    {
+                     double fxoi = dividedDifference(k,i);
+                     double nwProduct = 1.0;
+                     for(j=0;j<=i-1;j++)
+                            nwProduct *=(pointX - x[j]);
+                     estimate += fxoi * nwProduct;
+    }
+    printf("\n\nEstimate = %lf",estimate);
+    getch();
+    return 0;
+}
