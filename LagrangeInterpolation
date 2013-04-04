@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<conio.h>
+int n=5;
+double x[5]={1,2,3,4,5};
+double fx[5] = {1,1.4142,1.7321,2,2.2361};
+double valueFx=0.0;
+double lagrange(int i, double pointX)
+{
+       double value=1;
+       int j;
+       for(j=0;j<n;j++)
+       {
+             if(i!=j)
+                  value *= (pointX - x[j])/(x[i]-x[j]);
+       }
+       return value;
+}
+int main()
+{
+    double pointX=2.5;
+    int i;
+    for(i=0;i<n;i++)
+    {
+          valueFx += fx[i] * lagrange(i,pointX);
+          printf("\nlagrange = %lf",lagrange(i,pointX));
+    }
+    printf("\n\nF(%lf) = %lf",pointX,valueFx);
+    getch();
+    return 0;
+}
