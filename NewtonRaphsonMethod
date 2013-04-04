@@ -1,0 +1,82 @@
+//PROGRAM TO IMPLEMENT NEWTON-RAPHSON METHOD TO FIND THE ROOT OF A NON-LINEAR EQUATION
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+
+int * derivative ( int  fn[], int size) // function to calculate derivate of fn
+{
+    int i;
+    int* out=(int*)malloc(sizeof(int)*(size-1));
+    for( i = size ; i>0 ; i--)
+         out[i-1] = fn[i]*i;
+    return (out);
+}
+float fnValue( int fun[], int size, float x)
+{
+       float fnVal=0;
+       int i;
+       for(i=size;i>=0;i--)
+            fnVal += pow(x,i)*fun[i];             
+       return fnVal;
+}
+void printPolynomial( int *polynomial, int size)
+{
+    int i;
+    for(i=size;i>=0;i--)
+    {
+         if (i!=0 || polynomial[0]!=0)
+         {
+            if(polynomial[i]>=0 && i!=size)
+                  printf(" +");
+            else
+                  printf(" ");
+            if(polynomial[i]!=1)
+                  printf("%d",polynomial[i]);
+            if(i!=0)
+                  printf("x");
+            if(i>1)
+                  printf("^%d ",i);
+         }
+    }
+}
+
+int main(void)
+{
+    float x0, x1, fx0, fx1, er, e;
+    int n, i, count = 0;
+    printf("Enter the maximum power of the function : ");
+    scanf("%d",&n);
+    int fn[n+1];
+    for(i=n;i>=0;i--)
+    {
+              printf("Enter the COFFICIENT of x^%d :", i);
+              scanf("%d",&fn[i]);
+    }
+    printf("\nF(x)  : ");
+    printPolynomial(fn,n);
+    int *deriv = derivative(fn,n);
+    printf("\n\nF'(x) : ");
+    printPolynomial(deriv,n-1);
+    printf("\n\nEnter your INITIAL GUESS : ");
+    scanf("%f",&x0);
+    printf("Enter the MAXIMUM ERROR allowed :");
+    scanf("%f",&e);    
+    while(1)
+    {
+            printf("\n\n---------------\n  Iteration %d\n---------------\n",++count);
+            fx0 = fnValue(fn,n,x0);
+            fx1 = fnValue(deriv,n-1,x0);
+            x1 = x0 - (fx0/fx1);
+            er = fabs((x1-x0)/x1);
+            printf("x0 = %f\tx1 = %f\nfx0 = %f\tfx1= %f\nError = %f",x0,x1,fx0,fx1,er);
+            if(er> e)
+                x0 = x1;
+            else
+            {
+                printf("\n\nThe root is %f",x1);
+                break;
+            }
+    }
+    getch();
+    return 0;
+}
