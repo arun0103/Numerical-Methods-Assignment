@@ -1,0 +1,36 @@
+#include<stdio.h>
+#include<conio.h>
+int a3, a2, a1, a0,i=1;
+#define F(x) a3*x*x*x+a2*x*x + a1*x +a0
+int main()
+{
+    
+    float xl, xu,xm, e, fxl, fxm, fxu;
+    printf("Enter the values of a3, a2, a1, a0: ");
+    scanf("%d %d %d %d", &a3,&a2,&a1,&a0);
+    printf("Enter the values of xl, xu and E: ");
+    scanf("%f %f %f", &xl, &xu, &e);
+    while(1)
+    {
+            printf("Iteration %d", i++);
+            xm = (xu + xl)/2;
+            if ( (xu - xl)/xu < e)
+            {
+                 printf("\nThe root is %f", xm);
+                 break;
+            }
+            else
+            {
+                fxl= F(xl);
+                fxu= F(xu);
+                fxm= F(xm);
+                if (fxl * fxm < 0)
+                   xu = xm;
+                if ( fxm * fxu < 0)
+                   xl = xm;
+            }
+            printf("\nxl = %f\nxu = %f\nxm = %f\n", xl, xu, xm);
+    }
+    getch();
+    return 0;
+}
