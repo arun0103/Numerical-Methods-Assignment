@@ -1,0 +1,78 @@
+//PROGRAM TO FIND THE ROOT OF THE GIVEN FUNCTION USING SECANT METHOD
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+#include<stdlib.h>
+float fnValue( int fn[], int size, float x)
+{
+       float fnVal=0;
+       int i;
+       for(i=size;i>=0;i--)
+            fnVal += pow(x,i)*fn[i];                   
+       return fnVal;
+}
+void printPolynomial( int *polynomial, int size)
+{
+    int i;
+    for(i=size;i>=0;i--)
+    {
+         if (i!=0 || polynomial[0]!=0)
+         {
+            if(polynomial[i]>=0 && i!=size)
+                  printf(" +");
+            else
+                  printf(" ");
+            if(polynomial[i]!=1)
+                  printf("%d",polynomial[i]);
+            if(i!=0)
+                  printf("x");
+            if(i>1)
+                  printf("^%d ",i);
+         }
+    }
+    printf("\n");
+}
+int main()
+{
+    float x0, x1, x2, fx0, fx1, e, er;
+    int n, i;
+    printf("Enter the MAXIMUM DEGREE of the function: ");
+    scanf("%d",&n);
+    int *fn = (int*)malloc(n+1);
+    for(i=n;i>=0;i--)
+    {
+              printf("Enter COEFFICIENT of x^%d:", i);
+              scanf("%d",&fn[i]);
+    }
+    printf("\nF(x) :");
+    printPolynomial(fn,n);
+    printf("\nEnter FIRST INITIAL GUESS  : x0: ");
+    scanf("%f",&x0);
+    printf("Enter SECOND INITIAL GUESS : x1: ");
+    scanf("%f",&x1);
+    printf("Enter MAXIMUM ERROR allowed : ");
+    scanf("%f",&e);
+    i=1;
+    while(1)
+    {
+            printf("\n------------\nITERATION %d\n------------\n",i++);
+            fx0=fnValue(fn,n,x0);
+            fx1=fnValue(fn,n,x1);
+            x2 = x1 - ((fx1*(x1-x0))/(fx1-fx0));
+            er = fabs((x2-x1)/x2);
+            printf("x0  = %6.3f\tx1  = %6.3f\tx2    = %6.3f\n",x0,x1,x2);
+            printf("fx0 = %6.3f\tfx1 = %6.3f\tError = %6.3f\n",fx0,fx1,er);
+            if(er > e)
+            {
+                      x0=x1;
+                      x1=x2;
+            }
+            else
+            {
+                printf("\nThe root is x2 = %.3f",x2);
+                break;
+            }
+    }
+    getch();
+    return 0;
+}
